@@ -14,7 +14,7 @@ namespace BookApiProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        [MaxLength(50, ErrorMessage ="Country name can't be more than 50 characters")]
+        [MaxLength(50, ErrorMessage ="Country must be up to 50 characters in length")]
         public string Name { get; set; }
         public virtual ICollection<Author> Authors { get; set; }
         
