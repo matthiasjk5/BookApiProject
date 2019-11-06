@@ -9,7 +9,7 @@ namespace BookApiProject.Services
 {
     public class BookDbContext : DbContext
     {
-        public BookDbContext(DbContextOptions<DbContext> options) : base(options)
+        public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)
         {
             Database.Migrate();
         }
@@ -22,5 +22,34 @@ namespace BookApiProject.Services
         public virtual DbSet<Reviewer> Reviewers { get; set; }
         public virtual DbSet<BookAuthor> BookAuthors { get; set; }
         public virtual DbSet<BookCategory> BookCategories { get; set; }
+
+        // establish Many-to-Many relationship
+        protected override void OnModelCreating (ModelBuilder modelBuilder)
+        {
+            // many to many relationship between BookCategory
+            modelBuilder.Entity<BookCategory>()
+                        .HasKey(bc => new { bc.BookId, bc.CategoryId });
+            modelBuilder.Entity<BookCategory>()
+                        .HasOne(b => b.Book)
+                        .WithMany(bc => bc.BookCategories)
+                        .HasForeignKey(b => b.BookId);
+            modelBuilder.Entity<BookCategory>()
+                        .HasOne(c => c.Category)
+                        .WithMany(bc => bc.BookCategories)
+                        .HasForeignKey(c => c.CategoryId);
+
+            // many to many relationship between BookAuthor
+            modelBuilder.Entity<BookAuthor>()
+                        .HasKey(ba => new { ba.BookId, ba.AuthorId });
+            modelBuilder.Entity<BookAuthor>()
+                        .HasOne(b => b.Book)
+                        .WithMany(ba => ba.BookAuthors)
+                        .HasForeignKey(b => b.BookId);
+            modelBuilder.Entity<BookAuthor>()
+                        .HasOne(a => a.Author)
+                        .WithMany(ba => ba.BookAuthors)
+                        .HasForeignKey(a => a.AuthorId);
+                        
+        }
     }
 }

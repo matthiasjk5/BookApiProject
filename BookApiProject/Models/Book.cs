@@ -19,7 +19,6 @@ namespace BookApiProject
         [Required]
         [MaxLength(200, ErrorMessage = "Title can't be more than 200 characters")]
         public string Title { get; set; }
-        
         public DateTime? DatePublished { get; set; } // nullable e.g) DateTime?
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual ICollection<BookAuthor> BookAuthors { get; set; }
